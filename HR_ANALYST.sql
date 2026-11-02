@@ -1,0 +1,81 @@
+CREATE DATABASE HR_ANALYST;
+
+USE hr_analyst;
+
+SELECT*FROM HR_1;
+SELECT*FROM HR_2;
+
+#Average Attrition rate for all Departments
+SELECT DEPARTMENT,
+concat(ROUND(avg(CASE WHEN ATTRITION="YES" THEN 1
+ELSE 0
+END)*100,2),"%")AS AVG_ATTRITION_RATE
+FROM HR_1
+GROUP BY DEPARTMENT;
+
+# Average Hourly rate of Male Research Scientist
+SELECT JOBROLE,
+       GENDER,
+       ROUND(AVG(HOURLYRATE),2) AS Average_Hourly_rate 
+FROM HR_1
+WHERE JOBROLE="RESEARCH SCIENTIST" AND GENDER="MALE"
+GROUP BY JOBROLE,GENDER;
+
+# Attrition rate Vs Monthly income stats
+SELECT A.DEPARTMENT,
+       A.ATTRITION,
+       ROUND(AVG(B.MONTHLYINCOME),2) AS AVG_MONTHLY_INCOME,
+       CONCAT(ROUND(AVG(CASE WHEN A.ATTRITION="YES" THEN 1
+       ELSE 0
+       END)*100,2),"%") AS ATTRITION_RATE
+FROM HR_1 AS A
+INNER JOIN HR_2 AS B
+ON A.EmployeeNumber=B.EmployeeID
+group by A.DEPARTMENT, A.ATTRITION;
+
+#Average working years for each Department
+SELECT A.DEPARTMENT,
+       round(AVG(B.TotalWorkingYears),2) AS AVERAGE_WORKING_YEARS
+FROM HR_1 AS A
+INNER JOIN HR_2 AS B
+ON A.EmployeeNumber=B.EmployeeID
+GROUP BY A.DEPARTMENT;
+
+#Job Role Vs Work life balance
+SELECT A.JOBROLE,
+       ROUND(AVG(B.WORKLIFEBALANCE),2) AS AVG_WORK_LIFE_BALANCE
+FROM HR_1 AS A
+INNER JOIN HR_2 AS B
+ON A.EMPLOYEENUMBER=B.EMPLOYEEID
+GROUP BY A.JOBROLE;
+
+#Attrition rate Vs Year since last promotion relation
+SELECT A.DEPARTMENT,
+       A.ATTRITION,
+       ROUND(AVG(B.YearsSinceLastPromotion),2) AS AVG_Year_since_last_promotion_relation,
+       CONCAT(ROUND(AVG(CASE WHEN A.ATTRITION="YES" THEN 1
+       ELSE 0
+       END)*100,2),"%") AS ATTRITION_RATE
+FROM HR_1 AS A
+INNER JOIN HR_2 AS B
+ON A.EMPLOYEENUMBER=B.EMPLOYEEID
+GROUP BY A.DEPARTMENT, A.ATTRITION;
+       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
